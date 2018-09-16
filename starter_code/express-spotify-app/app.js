@@ -33,9 +33,11 @@ app.get('/', (req, res, next) => {
 	res.render('index', {});
 });
 
+//variable shared between the two controllers
+let name;
 
 app.get('/artists', (req, res, next) => {
-	const name = req.query.artist;
+	name = req.query.artist;
 	spotifyApi.searchArtists(name)
 		.then(data => {
 			const artists = data.body.artists.items;
@@ -48,15 +50,6 @@ app.get('/artists', (req, res, next) => {
 
 app.get('/albums/:artistId', (req, res) => {
 	const artistId = req.params.artistId;
-	let name = '';
-	
-	spotifyApi.getArtist (artistId)
-		.then(data => { 
-			name = data.body.name
-		})
-		.catch(err => {
-			console.log('Error', err);
-		})
 
 	spotifyApi.getArtistAlbums(artistId)
 		.then(data => {
